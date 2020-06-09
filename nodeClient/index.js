@@ -1,53 +1,67 @@
 const os = require('os')
-const cpus = os.cpus()
+
+
+
+
 
 
 //!CPU Load
 
 
 
+function performanceData() {
+  return new Promise((resolve, reject) => {
 
-//! Memory Usage
-//free
-const freeMem = os.freemem()
-console.log(freeMem)
+    const cpus = os.cpus()
 
-//total
-const totalMem = os.totalmem()
-console.log(totalMem)
+    //! Memory Usage
+    //free
+    const freeMem = os.freemem()
+    // console.log(freeMem)
 
-//mem usage
-const usedMem = totalMem - freeMem
-const memUsage = Math.floor(usedMem / totalMem * 100) / 100
+    //total
+    const totalMem = os.totalmem()
+    // console.log(totalMem)
 
-console.log(memUsage)
+    //mem usage
+    const usedMem = totalMem - freeMem
+    const memUsage = Math.floor(usedMem / totalMem * 100) / 100
 
-
-//!OS Type
-const osType = os.type() === 'Darwin' ? 'Mac' : os.type()
-console.log(osType)
-
-//!uptime
-const upTime = os.uptime()
-console.log(upTime)
+    // console.log(memUsage)
 
 
-//! CPU Into
+    //!OS Type
+    const osType = os.type() === 'Darwin' ? 'Mac' : os.type()
+    // console.log(osType)
 
-//type
-const cpuModel = cpus[0].model
+    //!uptime
+    const upTime = os.uptime()
+    // console.log(upTime)
 
-console.log('cpu Model: ', cpuModel)
 
-// number of cores
-const numCores = cpus.length
+    //! CPU Into
 
-console.log('number of cores: ', numCores)
+    //type
+    const cpuModel = cpus[0].model
 
-//clock speed
-const cpuSpeed = cpus[0].speed
+    // console.log('cpu Model: ', cpuModel)
 
-console.log(cpuSpeed)
+    // number of cores
+    const numCores = cpus.length
+
+    // console.log('number of cores: ', numCores)
+
+    //clock speed
+    const cpuSpeed = cpus[0].speed
+    const cpuLoad = getCPULoad()
+
+    // console.log(cpuSpeed)
+
+    resolve({ freeMem, totalMem, usedMem, memUsage, osType, upTime, cpuModel, numCores, cpuSpeed, cpuLoad })
+
+  })
+
+}
 
 
 function cpuAverage() {
@@ -71,18 +85,24 @@ function cpuAverage() {
 }
 
 
+
+
+
 function getCPULoad() {
-  const start = cpuAverage()
-  setTimeout(() => {
-    const end = cpuAverage()
-    const idleDifference = end.idle - start.idle
-    const totalDifference = end.total - start.total
-    // console.log(idleDifference, totalDifference)
-    const percentageCPU = 100 - Math.floor(100 * idleDifference / totalDifference)
-    console.log(percentageCPU)
-  }, 100)
+  return new Promise((resolve, reject) => {
+    const start = cpuAverage()
+    setTimeout(() => {
+      const end = cpuAverage()
+      const idleDifference = end.idle - start.idle
+      const totalDifference = end.total - start.total
+      // console.log(idleDifference, totalDifference)
+      const percentageCPU = 100 - Math.floor(100 * idleDifference / totalDifference)
+      resolve(percentageCPU)
+    }, 100)
+
+  })
 }
 
-setInterval(() => {
-  getCPULoad()
-}, 1000)
+performanceData().then((allPerformanceData)=>{
+  console.log(allPerformanceData)
+})
