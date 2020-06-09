@@ -1,4 +1,5 @@
 const os = require('os')
+const cpus = os.cpus()
 
 
 //!CPU Load
@@ -32,7 +33,56 @@ console.log(upTime)
 
 
 //! CPU Into
-//type
-// number of cores
-//clock speed
 
+//type
+const cpuModel = cpus[0].model
+
+console.log('cpu Model: ', cpuModel)
+
+// number of cores
+const numCores = cpus.length
+
+console.log('number of cores: ', numCores)
+
+//clock speed
+const cpuSpeed = cpus[0].speed
+
+console.log(cpuSpeed)
+
+
+function cpuAverage() {
+  const cpus = os.cpus()
+
+  let idleMS = 0
+  let totalMS = 0
+
+  cpus.forEach((core) => {
+    //loop through each property of the current core
+    for (type in core.times) {
+      totalMS += core.times[type]
+    }
+    idleMS += core.times.idle
+  })
+  return {
+    idle: idleMS / cpus.length,
+    total: totalMS / cpus.length
+  }
+
+}
+
+
+function getCPULoad() {
+  const start = cpuAverage()
+  setTimeout(() => {
+    const end = cpuAverage()
+    const idleDifference = end.idle - start.idle
+    const totalDifference = end.total - start.total
+    // console.log(idleDifference, totalDifference)
+    const percentageCPU = 100 - Math.floor(100 * idleDifference / totalDifference)
+    console.log(percentageCPU)
+  }, 100)
+}
+
+setInterval(() => {
+  getCPULoad()
+}, 1000)
