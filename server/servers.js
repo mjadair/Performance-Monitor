@@ -8,7 +8,7 @@ const socketio = require('socket.io')
 const socketMain = require('./socketMain')
 // const expressMain = require('./expressMain');
 
-const port = 8181
+const port = 8000
 const num_processes = require('os').cpus().length
 
 
@@ -33,7 +33,7 @@ if (cluster.isMaster) {
       // console.log('respawning worker', i);
       spawn(i)
     })
-  };
+  }
 
   // Spawn workers.
   for (var i = 0; i < num_processes; i++) {
@@ -50,7 +50,7 @@ if (cluster.isMaster) {
   // worker index distribution only much faster.
   const worker_index = function (ip, len) {
     return farmhash.fingerprint32(ip) % len // Farmhash is the fastest and works with IPv6, too
-  };
+  }
 
 
   // in this case, we are going to start up a tcp connection via the net
