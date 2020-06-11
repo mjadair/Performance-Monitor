@@ -6,6 +6,38 @@ const socket = io('http://127.0.01:8000')
 socket.on('connect', () => {
   // console.log('This is connected to the server Array.')
   const networkInterface = os.networkInterfaces()
+  let macAddress
+
+
+  for (let key in networkInterface) {
+    if (!networkInterface[key][0].internal) {
+      macAddress = networkInterface[key][0].mac
+      break
+    }
+  }
+
+  performanceData().then((allPerformanceData) => {
+    allPerformanceData.macAddress = macAddress
+    socket.emit('initPerfData', allPerformanceData)
+  })
+
+
+
+  socket.emit('clientAuth', 'rkjbaa-XB-vblbgaeiu47t85q9')
+
+
+  let performanceDataInterval = setInterval(() => {
+    performanceData().then((allPerformanceData) => {
+      socket.emit('perfData', allPerformanceData)
+    })
+  }, 1000)
+
+  socket.on('disconnect', () => {
+    clearInterval(performanceDataInterval)
+  })
+
+
+
 })
 
 
@@ -14,7 +46,7 @@ socket.on('connect', () => {
 
 
 function performanceData() {
-  return new Promise((resolve, reject) => {
+  return new Promise( async (resolve, reject) => {
 
     const cpus = os.cpus()
 
@@ -57,7 +89,7 @@ function performanceData() {
 
     //clock speed
     const cpuSpeed = cpus[0].speed
-    const cpuLoad = getCPULoad()
+    const cpuLoad = await getCPULoad()
 
     // console.log(cpuSpeed)
 
@@ -107,6 +139,4 @@ function getCPULoad() {
   })
 }
 
-performanceData().then((allPerformanceData)=>{
-  console.log(allPerformanceData)
-})
+
