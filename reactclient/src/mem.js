@@ -14,10 +14,10 @@ const Mem = (mem) =>  {
 </div>
 </div>
 <div>
-  Total Memory: {totalMem}
+  Total Memory: {(totalMem /1073741824 * 100)/100}GB Ram
 </div>
 <div>
-  Free Memory: {freeMem}
+  Free Memory: {Math.floor(freeMem/1073741824 * 100)/100}GB
 </div>
   </>
   
