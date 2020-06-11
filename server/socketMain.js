@@ -15,6 +15,7 @@ function socketMain(io, socket) {
       socket.join('clients')
     } else if (key === 'kzjevb--vbjvhsbrb') {
       socket.join('ui')
+      console.log('A React client has joined')
     } else {
       socket.disconnect(true)
     }
@@ -32,7 +33,8 @@ function socketMain(io, socket) {
 
   //a machine has connected, check to see if new - if it is, add it
   socket.on('perfData', (data) => {
-    console.log(data)
+    console.log('Tick')
+    io.to('ui').emit('data', data)
   })
 
 }
