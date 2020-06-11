@@ -11,8 +11,12 @@ socket.on('connect', () => {
 
   for (let key in networkInterface) {
     if (!networkInterface[key][0].internal) {
-      macAddress = networkInterface[key][0].mac
-      break
+      if (networkInterface[key][0].internal === '00:00:00:00:00:00') {
+        macAddress = Math.random().toString(36).substr(2, 15)
+      } else {
+        macAddress = networkInterface[key][0].mac
+        break
+      }
     }
   }
 
@@ -28,6 +32,7 @@ socket.on('connect', () => {
 
   let performanceDataInterval = setInterval(() => {
     performanceData().then((allPerformanceData) => {
+      allPerformanceData.macAddress = macAddress
       socket.emit('perfData', allPerformanceData)
     })
   }, 1000)
@@ -46,7 +51,7 @@ socket.on('connect', () => {
 
 
 function performanceData() {
-  return new Promise( async (resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
 
     const cpus = os.cpus()
 
