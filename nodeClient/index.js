@@ -1,8 +1,12 @@
 const os = require('os')
+const io = require('socket.io-client')
+const socket = io('http://127.0.01:8000')
 
 
-
-
+socket.on('connect', () => {
+  // console.log('This is connected to the server Array.')
+  const networkInterface = os.networkInterfaces()
+})
 
 
 //!CPU Load

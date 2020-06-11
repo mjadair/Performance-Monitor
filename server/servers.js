@@ -68,7 +68,7 @@ if (cluster.isMaster) {
   console.log(`Master listening on port ${port}`)
 } else {
   // Note we don't use a port here because the master listens on it for us.
-  // let app = express();
+  let app = express()
   // app.use(express.static(__dirname + '/public'));
   // app.use(helmet());
 
@@ -87,8 +87,10 @@ if (cluster.isMaster) {
   // on connection, send the socket over to our module with socket stuff
   io.on('connection', function (socket) {
     socketMain(io, socket)
+    console.log('Connected to worker: ', cluster.worker.id)
     // console.log(`connected to worker: ${cluster.worker.id}`);
   })
+
 
   // Listen to messages sent from the master. Ignore everything else.
   process.on('message', function (message, connection) {
