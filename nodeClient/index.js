@@ -10,6 +10,11 @@ socket.on('connect', () => {
 
 
   for (let key in networkInterface) {
+
+    // macAddress = Math.floor(Math.random * 3) + 1
+    // break
+
+
     if (!networkInterface[key][0].internal) {
       if (networkInterface[key][0].internal === '00:00:00:00:00:00') {
         macAddress = Math.random().toString(36).substr(2, 15)
@@ -95,10 +100,11 @@ function performanceData() {
     //clock speed
     const cpuSpeed = cpus[0].speed
     const cpuLoad = await getCPULoad()
+    const isActive = true
 
     // console.log(cpuSpeed)
 
-    resolve({ freeMem, totalMem, usedMem, memUsage, osType, upTime, cpuModel, numCores, cpuSpeed, cpuLoad })
+    resolve({ freeMem, totalMem, usedMem, memUsage, osType, upTime, cpuModel, numCores, cpuSpeed, cpuLoad, isActive })
 
   })
 

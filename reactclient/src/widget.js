@@ -6,17 +6,24 @@ import './widget.css'
 
 const Widget = (data) => {
 
-  const { macAddress, freeMem, totalMem, usedMem, memUsage, osType, upTime, cpuModel, numCores, cpuSpeed, cpuLoad } = data.data
-  const cpu = {cpuLoad}
-  const mem = {totalMem, usedMem, memUsage, freeMem}
-  const info = {macAddress, osType, upTime, cpuModel, numCores, cpuSpeed}
+  const { macAddress, freeMem, totalMem, usedMem, memUsage, osType, upTime, cpuModel, numCores, cpuSpeed, cpuLoad, isActive } = data.data
+  const cpu = { cpuLoad }
+  const mem = { totalMem, usedMem, memUsage, freeMem }
+  const info = { macAddress, osType, upTime, cpuModel, numCores, cpuSpeed }
+  let notActiveDiv = ''
 
-  return <>
-    <Cpu cpu={cpu}/>
-    <Mem mem={mem}/>
-    <Info info={info}/>
 
-  </>
+  if (!isActive) {
+    notActiveDive = <div classNAme="not-active">Offline</div>
+  }
+
+  return <div className="widget col-sm-12">
+    {notActiveDiv}
+    <Cpu cpu={cpu} />
+    <Mem mem={mem} />
+    <Info info={info} />
+
+  </div>
 
 }
 

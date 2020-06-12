@@ -16,9 +16,25 @@ function socketMain(io, socket) {
     } else if (key === 'kzjevb--vbjvhsbrb') {
       socket.join('ui')
       console.log('A React client has joined')
+      Machine.find({}, (err, docs) => {
+        docs.forEach((aMachine) => {
+          //on load, assume that all machines are offline
+          aMachine.isActive = false
+          io.to('ui').emit('data', aMachine)
+        })
+      })
     } else {
       socket.disconnect(true)
     }
+  })
+
+  socket.on('disconnect', () => {
+    Machine.find({ macAddress: macAddress }, (err, docs) => {
+      if (docs.length > 0) {
+        docs[0].isActive = false
+        io.to('ui').emit('data', docs[0])
+      }
+    })
   })
 
 
