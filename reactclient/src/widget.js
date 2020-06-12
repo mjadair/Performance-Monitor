@@ -14,7 +14,7 @@ const Widget = (data) => {
 
 
   if (!isActive) {
-    notActiveDive = <div classNAme="not-active">Offline</div>
+    notActiveDiv = <div className="not-active">Offline</div>
   }
 
   return <div className="widget col-sm-12">
